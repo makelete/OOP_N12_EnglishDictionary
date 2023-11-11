@@ -33,9 +33,13 @@ public class Asteroids extends Application {
         GraphicsContext context = canvas.getGraphicsContext2D();
         root.setCenter(canvas);
 
-        Sprite background = new Sprite("image/back_space.png");
-        background.position.set(400, 300);
-        background.render(context);
+//        Sprite background = new Sprite("image/back_space.png");
+//        background.position.set(400, 300);
+//        background.render(context);
+
+        Sprite charactor = new Sprite("image/spaceship.png");
+        charactor.position.set(100, 300);
+        charactor.render(context);
 
         mainStage.show();
     }
