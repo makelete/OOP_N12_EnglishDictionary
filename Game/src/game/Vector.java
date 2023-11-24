@@ -33,12 +33,13 @@ public class Vector {
 
     public void setLength(double L) {
         double curLength = this.getLength();
+        // if cur length is 0, then sur angle is undefined. Assume cur angle is 0.
         if(curLength == 0) {
-            return;
+            this.set(L, 0);
+        } else {
+            this.multiply(1 / curLength);
+            this.multiply(L);
         }
-
-        this.multiply(1 / curLength);
-        this.multiply(L);
     }
 
     public double getAngle() {
@@ -48,7 +49,7 @@ public class Vector {
     public void setAngle(double angleDegress) {
         double L = this.getLength();
         double angleRad = Math.toRadians(angleDegress);
-        this.x = L + Math.cos(angleRad);
-        this.y = L + Math.sin(angleRad);
+        this.x = L * Math.cos(angleRad);
+        this.y = L * Math.sin(angleRad);
     }
 }
