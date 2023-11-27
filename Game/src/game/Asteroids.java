@@ -12,7 +12,10 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 class DataStructure {
     int number;
@@ -21,29 +24,23 @@ class DataStructure {
 }
 
 public class Asteroids extends Application {
-    public static void main(String[] args) {
-        try {
-            launch(args);
-        }
-        catch (Exception error) {
-            error.printStackTrace();
-        }
-        finally {
-            System.exit(0);
-        }
-    }
-
     int score;
     int numCha;
-    String wordChallenge;
-    String wordMeaning;
-    boolean[] hitLetter = new boolean[26];
+    int numRan; // For challenge pic and letter.
 
-    private Set<Integer> numSet = new HashSet<>();
+    String srcPath = "C:\\Java\\OOP_N12_EnglishDictionary\\Game\\src\\image\\";
+    Sprite asteroidChallenge;
+
+    Set<Integer> numSet = new HashSet<Integer>();
+
+    private ArrayList<String> keyPress = new ArrayList<String>();
+    private ArrayList<String> keyJustPress = new ArrayList<String>();
+    private ArrayList<Sprite> bulletList = new ArrayList<>();
+    private ArrayList<Sprite> asteroidsList = new ArrayList<>();
+    private ArrayList<DataStructure> dataList = new ArrayList<>();
     private Random random = new Random();
 
-    // Random int from a to b.
-    public int randomInt(int a, int b) {
+    private int randomInt(int a, int b) {
         if (a > b) {
             throw new IllegalArgumentException("Invalid range");
         }
@@ -59,8 +56,28 @@ public class Asteroids extends Application {
         return randomNum;
     }
 
+    public void readDatafromTextfile(String filepath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("\\.");
+                if (parts.length == 3) {
+                    DataStructure temp = new DataStructure();
+                    temp.number = Integer.parseInt(parts[0]);
+                    temp.word = parts[1];
+                    temp.meaning = parts[2];
+                    dataList.add(temp);
+                } else {
+                    System.out.println("Invalid data format in line: " + line);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void start(Stage mainStage) {
-        mainStage.setTitle("Gem");
+        mainStage.setTitle("Asteroids");
 
         BorderPane root = new BorderPane();
         Scene mainScene = new Scene(root);
@@ -71,17 +88,10 @@ public class Asteroids extends Application {
         GraphicsContext context = canvas.getGraphicsContext2D();
         root.setCenter(canvas);
 
-        ArrayList<String> keyPress = new ArrayList<String>();
-        ArrayList<Sprite> bulletList = new ArrayList<Sprite>();
-        ArrayList<Sprite> asteroidsList = new ArrayList<Sprite>();
-        ArrayList<String> keyJustPress = new ArrayList<String>();
-        ArrayList<DataStructure> dataList = new ArrayList<DataStructure>();
-
         mainScene.setOnKeyPressed(
                 (KeyEvent event) -> {
                     String keyName = event.getCode().toString();
-                    // avoid adding duplicated to List.
-                    if (!keyPress.contains(keyName)){
+                    if (!keyPress.contains(keyName)) {
                         keyPress.add(keyName);
                         keyJustPress.add(keyName);
                     }
@@ -91,183 +101,168 @@ public class Asteroids extends Application {
         mainScene.setOnKeyReleased(
                 (KeyEvent event) -> {
                     String keyName = event.getCode().toString();
-                    if (keyPress.contains(keyName)) keyPress.remove(keyName);
+                    keyPress.remove(keyName);
                 }
         );
 
-        Sprite background = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//back.png");
+        Sprite background = new Sprite(srcPath + "back.png");
         background.position.set(400, 250);
 
-        Sprite spaceship = new Sprite("C:\\Java\\OOP_N12_EnglishDictionary\\Game\\src\\image\\spaceship.png");
+        Sprite spaceship = new Sprite(srcPath + "spaceship.png");
         spaceship.position.set(50, 200);
 
-        int asteroidsCount = 5;
-        for (int i = 0; i < asteroidsCount; i++) {
-            int numPic = randomInt(1, 26);
-            Sprite asteroid = null;
-            switch(numPic) {
-                case 1:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//A.png");
-                    break;
-                case 2:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//B.png");
-                    break;
-                case 3:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//C.png");
-                    break;
-                case 4:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//D.png");
-                    break;
-                case 5:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//E.png");
-                    break;
-                case 6:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//F.png");
-                    break;
-                case 7:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//G.png");
-                    break;
-                case 8:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//H.png");
-                    break;
-                case 9:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//I.png");
-                    break;
-                case 10:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//J.png");
-                    break;
-                case 11:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//K.png");
-                    break;
-                case 12:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//L.png");
-                    break;
-                case 13:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//M.png");
-                    break;
-                case 14:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//N.png");
-                    break;
-                case 15:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//O.png");
-                    break;
-                case 16:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//P.png");
-                    break;
-                case 17:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//Q.png");
-                    break;
-                case 18:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//R.png");
-                    break;
-                case 19:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//S.png");
-                    break;
-                case 20:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//T.png");
-                    break;
-                case 21:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//U.png");
-                    break;
-                case 22:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//V.png");
-                    break;
-                case 23:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//W.png");
-                    break;
-                case 24:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//X.png");
-                    break;
-                case 25:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//Y.png");
-                    break;
-                case 26:
-                    asteroid = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//Z.png");
-                    break;
-            }
-            double x = 500 * Math.random() + 300; // 300 - 800
-            double y = 300 * Math.random() + 100; // 100 - 400
-            asteroid.position.set(x, y);
-            double angle = 360 * Math.random();
-            asteroid.velocity.setLength(20);
-            asteroid.velocity.setAngle(angle);
-            asteroidsList.add(asteroid);
-        }
+        readDatafromTextfile(srcPath + "Data.txt");
 
         score = 0;
         numCha = 1;
-        for(int i = 0; i < 26; i++) hitLetter[i] = false;
+        numRan = randomInt(0, 99);
+        final DataStructure[] wordChallenge = {dataList.get(numRan)};
 
         AnimationTimer gameloop = new AnimationTimer() {
 
-            // File Input method.
-            public void readDatafromTextfile(String filepath) {
-                try (BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        String[] parts = line.split("\\."); // substring by ".".
-                        if (parts.length == 3) {
-                            DataStructure temp = new DataStructure();
-                            temp.number = Integer.parseInt(parts[0]);
-                            temp.word = parts[1];
-                            temp.meaning = parts[2];
-                            dataList.add(temp);
-                        } else {
-                            System.out.println("Invalid data format in line: " + line);
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+            public void initAsteroid() {
+                int asteroidsCount = 5;
+                for (int i = 0; i < asteroidsCount; i++) {
+                    int numPic = randomInt(1, 26);
+                    String namePic = srcPath + numPic + ".png";
+                    Sprite asteroid = new Sprite(namePic);
+                    double x = 500 * Math.random() + 300;
+                    double y = 300 * Math.random() + 100;
+                    asteroid.position.set(x, y);
+                    double angle = 360 * Math.random();
+                    asteroid.velocity.setLength(20);
+                    asteroid.velocity.setAngle(angle);
+                    asteroidsList.add(asteroid);
                 }
             }
 
-            // Check collision between bullet and text.
-            public boolean checkCollision() {
-                return false;
+            public void initAsteroidChallenge() {
+                if (dataList.isEmpty()) {
+                    return;
+                }
+                String fileName = srcPath + (wordChallenge[0].word.charAt(1) - 96) + ".png";
+                asteroidChallenge = new Sprite(fileName);
+                double picX = 500 * Math.random() + 300;
+                double picY = 300 * Math.random() + 100;
+                asteroidChallenge.position.set(picX, picY);
+                double angle = 360 * Math.random();
+                asteroidChallenge.velocity.setLength(20);
+                asteroidChallenge.velocity.setAngle(angle);
             }
 
-            int numWord = randomInt(0, 99);
             @Override
             public void handle(long nanotime) {
-                // process user input.
-                if(keyPress.contains("A")) spaceship.rotation -= 2;
+                processUserInput();
 
-                if(keyPress.contains("D")) spaceship.rotation += 2;
+                updateGameObjects();
 
-                if(keyPress.contains("W")) {
-                    spaceship.velocity.setLength(80); // speed.
-                    spaceship.velocity.setAngle(spaceship.rotation); // go ahead.
-                } else { // not pressing up
+                renderGameObjects(context);
+
+                renderUI(context);
+
+                handleBulletAsteroidCollision();
+
+                checkCollisions();
+            }
+
+            private void handleBulletAsteroidCollision() {
+                int bulletNum = 0;
+                while (bulletNum < bulletList.size()) {
+                    Sprite bullet = bulletList.get(bulletNum);
+                    int asteroidNum = 0;
+                    while (asteroidNum < asteroidsList.size()) {
+                        Sprite asteroid = asteroidsList.get(asteroidNum);
+                        if (bullet.overlaps(asteroid)) {
+                            score--;
+                            bulletList.remove(bulletNum);
+                        } else if(bullet.overlaps(asteroidChallenge)) {
+                            // Remove all objects of old Challenge, set spaceship to spawn.
+                            removeChallengeObjects(bulletNum, asteroidNum);
+
+                            // Create new Challenge word.
+                            numRan = randomInt(0, 99);
+                            DataStructure newChallenge = dataList.get(numRan);
+                            wordChallenge[0] = newChallenge;
+                            renderUI(context);
+
+                            // Create new image for asteroids.
+                            initAsteroid();
+                            initAsteroidChallenge();
+                        } else {
+                            asteroidNum++;
+                        }
+                    }
+                    bulletNum++;
+                }
+            }
+
+            private void removeChallengeObjects(int bulletNum, int asteroidNum) {
+                score++;
+                numCha++;
+                asteroidChallenge = null;
+                bulletList.remove(bulletNum);
+                asteroidsList.remove(asteroidNum);
+                asteroidsList.clear();
+                spaceship.position.set(50, 200);
+            }
+
+
+            private void processUserInput() {
+                if (keyPress.contains("A")) spaceship.rotation -= 2;
+                if (keyPress.contains("D")) spaceship.rotation += 2;
+                if (keyPress.contains("W")) {
+                    spaceship.velocity.setLength(60);
+                    spaceship.velocity.setAngle(spaceship.rotation);
+                } else {
                     spaceship.velocity.setLength(0);
                 }
 
-                if(keyJustPress.contains("SPACE")) {
-                    Sprite bullet = new Sprite("C://Java//OOP_N12_EnglishDictionary//Game//src//image//bullet.png");
-                    bullet.position.set(spaceship.position.x, spaceship.position.y);
+                if (keyJustPress.contains("SPACE")) {
+                    Sprite bullet = new Sprite(srcPath + "bullet.png");
+                    bullet.position.set(spaceship.position.x + 10, spaceship.position.y + 10);
                     bullet.velocity.setLength(150);
                     bullet.velocity.setAngle(spaceship.rotation);
                     bulletList.add(bullet);
                 }
 
-                // after processing user input, clear justPress.
                 keyJustPress.clear();
+            }
 
-                for (Sprite asteroid : asteroidsList) asteroid.update(1/60.0);
-                // update bullet; destroy if 4s passed.
-                for(int i = 0; i < bulletList.size(); i++) {
+            private void updateGameObjects() {
+                for (Sprite asteroid : asteroidsList) asteroid.update(1 / 60.0);
+
+                for (int i = 0; i < bulletList.size(); i++) {
                     Sprite bullet = bulletList.get(i);
-                    bullet.update(1/60.0);
+                    bullet.update(1 / 60.0);
                     if (bullet.elapsedTime > 4) bulletList.remove(i);
                 }
 
-                spaceship.update(1/60.0);
+                spaceship.update(1 / 60.0);
 
+                // Check if asteroidChallenge is not null before updating.
+                if (asteroidChallenge != null) {
+                    asteroidChallenge.update(1 / 60.0);
+                } else {
+                    // If asteroidChallenge is null, initialize a new challenge.
+                    initAsteroid();
+                    initAsteroidChallenge();
+                }
+            }
+
+            private void renderGameObjects(GraphicsContext context) {
                 background.render(context);
                 spaceship.render(context);
-                for(Sprite bullet : bulletList) bullet.render(context);
-                for(Sprite asteroids : asteroidsList) asteroids.render(context);
+                for (Sprite bullet : bulletList) bullet.render(context);
+                for (Sprite asteroid : asteroidsList) asteroid.render(context);
 
-                readDatafromTextfile("C://Java//OOP_N12_EnglishDictionary//Game//src//game//Data.txt");
+                // Kiểm tra nếu asteroidChallenge không phải là null trước khi render.
+                if (asteroidChallenge != null) {
+                    asteroidChallenge.render(context);
+                }
+            }
+
+
+            private void renderUI(GraphicsContext context) {
 
                 // Shape: Question.
                 context.setFill(Color.BEIGE);
@@ -297,32 +292,16 @@ public class Asteroids extends Application {
                 context.setFill(Color.BLACK);
                 context.setStroke(Color.CHOCOLATE);
                 context.setFont(new Font("Calibri", 65));
-                DataStructure wordTemp = dataList.get(numWord);
-                char x = wordTemp.word.charAt(1);
-                x = Character.toUpperCase(x);
-                String fileName = "C://Java//OOP_N12_EnglishDictionary//Game//src//image//" + x + ".png";
-                Sprite asteroidChallenge = new Sprite(fileName);
-                String newWord = wordTemp.word.charAt(0) + "_" + wordTemp.word.substring(2);
-                String wordText = newWord + ": " + wordTemp.meaning;
+                String newWord = wordChallenge[0].word.charAt(0) + "_" + wordChallenge[0].word.substring(2);
+                String wordText = newWord + ": " + wordChallenge[0].meaning;
                 int wordX = 230;
                 int wordY = 440;
                 context.fillText(wordText, wordX, wordY);
                 context.strokeText(wordText, wordX, wordY);
+            }
 
-                // when bullet overlaps asteroids, remove both.
-                // when spaceship overlaps asteroids, set spaceship to the spawn.
-                for(int bulletNum = 0; bulletNum < bulletList.size(); bulletNum++) {
-                    Sprite bullet = bulletList.get(bulletNum);
-                    for(int asteroidNum = 0; asteroidNum < asteroidsList.size(); asteroidNum++) {
-                        Sprite asteroid = asteroidsList.get(asteroidNum);
-                        if (bullet.overlaps(asteroid)) {
-                            score++;
-                            numCha++;
-                            bulletList.remove(bulletNum);
-                            asteroidsList.remove(asteroidNum);
-                        }
-                    }
-                }
+            private void checkCollisions() {
+                // ... (check and handle collisions)
             }
         };
 
