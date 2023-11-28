@@ -1,0 +1,100 @@
+1.Hello.Xin chào
+2.Goodbye.Tạm biệt
+3.Thank you.Cảm ơn bạn
+4.Please.Làm ơn
+5.Sorry.Xin lỗi
+6.Yes.Có
+7.No.Không
+8.Excuse me.Xin lỗi, làm phiền một chút
+9.Wave.Sóng
+10.You.Bạn
+11.He.Anh ấy
+12.She.Cô ấy
+13.We.Chúng tôi
+14.They.Họ
+15.It.Nó
+16.This.Này
+17.That.Kia
+18.Here.Đây
+19.There.Đó
+20.What.Cái gì
+21.Where.Ở đâu
+22.When.Khi nào
+23.Why.Tại sao
+24.How.Làm thế nào
+25.Who.Ai
+26.Name.Tên
+27.Age.Tuổi
+28.Family.Gia đình
+29.Friend.Bạn bè
+30.Home.Nhà
+31.School.Trường học
+32.Work.Công việc
+33.Play.Chơi
+34.Eat.Ăn
+35.Drink.Uống
+36.Sleep.Ngủ
+37.Happy.Hạnh phúc
+38.Sad.Buồn
+39.Angry.Tức giận
+40.Love.Yêu
+41.Hate.Ghét
+42.Beautiful.Đẹp
+43.Ugly.Xấu
+44.Big.Lớn
+45.Small.Nhỏ
+46.Hot.Nóng
+47.Cold.Lạnh
+48.Fast.Nhanh
+49.Slow.Chậm
+50.Good.Tốt
+51.Bad.Xấu
+52.Right.Đúng
+53.Wrong.Sai
+54.True.Đúng
+55.False.Sai
+56.Day.Ngày
+57.Night.Đêm
+58.Sun.Mặt trời
+59.Moon.Mặt trăng
+60.Star.Ngôi sao
+61.Sky.Bầu trời
+62.Earth.Trái đất
+63.Water.Nước
+64.Fire.Lửa
+65.Air.Không khí
+66.Tree.Cây
+67.Flower.Hoa
+68.Animal.Động vật
+69.Bird.Chim
+70.Fish.Cá
+71.Insect.Côn trùng
+72.Dog.Chó
+73.Cat.Mèo
+74.Horse.Ngựa
+75.Cow.Bò
+76.Pig.Lợn
+77.Elephant.Voi
+78.Monkey.Khỉ
+79.Snake.Rắn
+80.Fish.Cá
+81.Food.Thức ăn
+82.Fruit.Trái cây
+83.Vegetable.Rau củ
+84.Rice.Cơm
+85.Bread.Bánh mì
+86.Meat.Thịt
+87.Milk.Sữa
+88.Water.Nước
+89.Tea.Trà
+90.Coffee.Cà phê
+91.Juice.Nước ép
+92.Salt.Muối
+93.Sugar.Đường
+94.Salt.Muối
+95.Sweet.Ngọt
+96.Sour.Chua
+97.Bitter.Đắng
+98.Spicy.Cay
+99.Money.Tiền
+100.Time.Thời gian
