@@ -28,7 +28,7 @@ public class Asteroids extends Application {
     int numCha;
     int numRan; // For challenge pic and letter.
 
-    String srcPath = "C:\\Java\\OOP_N12_EnglishDictionary\\Game\\src\\image\\";
+    String srcPath = "C://Java//OOP_N12_EnglishDictionary//Game//src//image//";
     Sprite asteroidChallenge;
 
     Set<Integer> numSet = new HashSet<Integer>();
@@ -161,22 +161,20 @@ public class Asteroids extends Application {
                 renderUI(context);
 
                 handleBulletAsteroidCollision();
-
-                checkCollisions();
             }
 
             private void handleBulletAsteroidCollision() {
-                int bulletNum = 0;
-                while (bulletNum < bulletList.size()) {
+                for (int bulletNum = bulletList.size() - 1; bulletNum >= 0; bulletNum--) {
                     Sprite bullet = bulletList.get(bulletNum);
                     int asteroidNum = 0;
+
                     while (asteroidNum < asteroidsList.size()) {
                         Sprite asteroid = asteroidsList.get(asteroidNum);
                         if (bullet.overlaps(asteroid)) {
-                            score--;
+                            score -= 50;
                             bulletList.remove(bulletNum);
-                        } else if(bullet.overlaps(asteroidChallenge)) {
-                            // Remove all objects of old Challenge, set spaceship to spawn.
+                        } else if (asteroidChallenge != null && bullet.overlaps(asteroidChallenge)) {
+                            // Remove all Challenge Objects.
                             removeChallengeObjects(bulletNum, asteroidNum);
 
                             // Create new Challenge word.
@@ -185,19 +183,18 @@ public class Asteroids extends Application {
                             wordChallenge[0] = newChallenge;
                             renderUI(context);
 
-                            // Create new image for asteroids.
+                            // Create new Image for asteroids.
                             initAsteroid();
                             initAsteroidChallenge();
                         } else {
                             asteroidNum++;
                         }
                     }
-                    bulletNum++;
                 }
             }
 
             private void removeChallengeObjects(int bulletNum, int asteroidNum) {
-                score++;
+                score += 100;
                 numCha++;
                 asteroidChallenge = null;
                 bulletList.remove(bulletNum);
@@ -291,17 +288,13 @@ public class Asteroids extends Application {
                 // Text: Challenge.
                 context.setFill(Color.BLACK);
                 context.setStroke(Color.CHOCOLATE);
-                context.setFont(new Font("Calibri", 65));
+                context.setFont(new Font("Calibri", 45));
                 String newWord = wordChallenge[0].word.charAt(0) + "_" + wordChallenge[0].word.substring(2);
                 String wordText = newWord + ": " + wordChallenge[0].meaning;
-                int wordX = 230;
+                int wordX = 150;
                 int wordY = 440;
                 context.fillText(wordText, wordX, wordY);
                 context.strokeText(wordText, wordX, wordY);
-            }
-
-            private void checkCollisions() {
-                // ... (check and handle collisions)
             }
         };
 
