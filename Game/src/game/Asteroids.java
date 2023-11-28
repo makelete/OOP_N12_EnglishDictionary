@@ -120,22 +120,6 @@ public class Asteroids extends Application {
 
         AnimationTimer gameloop = new AnimationTimer() {
 
-            public void initAsteroid() {
-                int asteroidsCount = 5;
-                for (int i = 0; i < asteroidsCount; i++) {
-                    int numPic = randomInt(1, 26);
-                    String namePic = srcPath + numPic + ".png";
-                    Sprite asteroid = new Sprite(namePic);
-                    double x = 500 * Math.random() + 300;
-                    double y = 300 * Math.random() + 100;
-                    asteroid.position.set(x, y);
-                    double angle = 360 * Math.random();
-                    asteroid.velocity.setLength(20);
-                    asteroid.velocity.setAngle(angle);
-                    asteroidsList.add(asteroid);
-                }
-            }
-
             public void initAsteroidChallenge() {
                 if (dataList.isEmpty()) {
                     return;
@@ -148,6 +132,33 @@ public class Asteroids extends Application {
                 double angle = 360 * Math.random();
                 asteroidChallenge.velocity.setLength(20);
                 asteroidChallenge.velocity.setAngle(angle);
+            }
+
+            private void initAsteroid() {
+                int asteroidsCount = 5;
+                for (int i = 0; i < asteroidsCount; i++) {
+                    int numPic;
+
+                    do {
+                        numPic = randomInt(1, 26);
+                    } while (numPic == wordChallenge[0].word.charAt(1) - 96);
+
+                    String namePic = srcPath + numPic + ".png";
+
+                    // Create for new asteroid.
+                    Sprite asteroid = new Sprite(namePic);
+                    double x = 500 * Math.random() + 300;
+                    double y = 300 * Math.random() + 100;
+
+                    // Set speed and local for asteroid.
+                    asteroid.position.set(x, y);
+                    double angle = 360 * Math.random();
+                    asteroid.velocity.setLength(20);
+                    asteroid.velocity.setAngle(angle);
+
+                    // Thêm asteroid vào danh sách.
+                    asteroidsList.add(asteroid);
+                }
             }
 
             @Override
@@ -241,8 +252,8 @@ public class Asteroids extends Application {
                     asteroidChallenge.update(1 / 60.0);
                 } else {
                     // If asteroidChallenge is null, initialize a new challenge.
-                    initAsteroid();
                     initAsteroidChallenge();
+                    initAsteroid();
                 }
             }
 
