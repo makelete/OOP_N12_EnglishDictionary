@@ -171,7 +171,7 @@ public class Asteroids extends Application {
                     while (asteroidNum < asteroidsList.size()) {
                         Sprite asteroid = asteroidsList.get(asteroidNum);
                         if (bullet.overlaps(asteroid)) {
-                            score -= 50;
+                            score -= 5;
                             bulletList.remove(bulletNum);
                         } else if (asteroidChallenge != null && bullet.overlaps(asteroidChallenge)) {
                             // Remove all Challenge Objects.
@@ -194,7 +194,7 @@ public class Asteroids extends Application {
             }
 
             private void removeChallengeObjects(int bulletNum, int asteroidNum) {
-                score += 100;
+                score += 10;
                 numCha++;
                 asteroidChallenge = null;
                 bulletList.remove(bulletNum);
